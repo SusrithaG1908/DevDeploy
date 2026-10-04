@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Management System</title>
+<style>
+  :root {
+    --bg: #F6F6F4;
+    --surface: #FFFFFF;
+    --ink: #20262B;
+    --muted: #6B7280;
+    --line: #E4E4E1;
+    --teal: #2A6F6F;
+    --teal-dark: #1E5353;
+    --danger: #B4453A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  header {
+    padding: 2.25rem clamp(1.25rem, 5vw, 3rem) 1.5rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  header p {
+    margin: 0.2rem 0 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .count-pill {
+    background: var(--teal);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem clamp(1.25rem, 5vw, 3rem) 3rem;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+  @media (max-width: 720px) {
+    main { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.5rem;
+  }
+  .card h2 {
+    margin: 0 0 1rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 0.85rem 0 0.3rem;
+  }
+  label:first-of-type { margin-top: 0; }
+  input, select {
+    width: 100%;
+    padding: 0.55rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 0.92rem;
+    font-family: inherit;
+    color: var(--ink);
+    background: var(--bg);
+  }
+  input:focus, select:focus, button:focus, .icon-btn:focus {
+    outline: 2px solid var(--teal);
+    outline-offset: 1px;
+  }
+  button.primary {
+    margin-top: 1.25rem;
+    width: 100%;
+    padding: 0.65rem;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button.primary:hover { background: var(--teal-dark); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.7rem 0.6rem;
+    border-bottom: 1px solid var(--line);
+  }
+  th {
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 0.82rem;
+  }
+  tr:last-child td { border-bottom: none; }
+  .icon-btn {
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--danger);
+    border-radius: 6px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .icon-btn:hover { background: #FBEEEC; }
+  .empty {
+    color: var(--muted);
+    font-size: 0.9rem;
+    padding: 1rem 0;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    padding: 1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Automated Student Management System</h1>
+    <p>CBIT &middot; deployed via CI/CD pipeline to Kubernetes</p>
+  </div>
+  <span class="count-pill">{{ count }} student{{ 's' if count != 1 else '' }}</span>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Add a student</h2>
+    <form action="/add" method="post">
+      <label for="name">Full name</label>
+      <input id="name" name="name" type="text" placeholder="e.g. Ananya Rao" required>
+
+      <label for="branch">Branch</label>
+      <input id="branch" name="branch" type="text" placeholder="e.g. CSE" required>
+
+      <label for="year">Year</label>
+      <select id="year" name="year" required>
+        <option value="1">1st year</option>
+        <option value="2">2nd year</option>
+        <option value="3">3rd year</option>
+        <option value="4">4th year</option>
+      </select>
+
+      <button class="primary" type="submit">Add student</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Student roster</h2>
+    {% if students %}
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Branch</th><th>Year</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ s.name }}</td>
+          <td>{{ s.branch }}</td>
+          <td>{{ s.year }}</td>
+          <td>
+            <form action="/delete/{{ s.id }}" method="post" style="margin:0;">
+              <button class="icon-btn" type="submit">Remove</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty">No students yet — add one on the left.</p>
+    {% endif %}
+  </section>
+</main>
+
+<footer>Health check: <a href="/health">/health</a> &middot; API: <a href="/api/students">/api/students</a></footer>
+
+</body>
+</html>
