@@ -1,4 +1,4 @@
-# Student Management System — Application + Testing (Member 1)
+# Student Management System — Application + Testing
 
 ## What this is
 A small but real Flask web app — an actual page with a form and a live
@@ -37,19 +37,3 @@ python app.py
 ```bash
 pytest -v
 ```
-Expected: `6 passed`
-
-## Handoff notes for the team
-- **Member 3 (Docker):** app listens on `0.0.0.0:5000`. The `templates/`
-  folder must be copied into the image alongside `app.py` — don't just
-  copy `app.py` on its own, or Flask won't find the HTML page.
-- **Member 4 (Jenkins):** test stage should run
-  `pip install -r requirements.txt && pytest`. If that fails, the
-  pipeline should stop before the Docker build stage.
-- **Member 5 (Kubernetes):** container port is `5000` — `containerPort: 5000`
-  in `deployment.yaml`, `targetPort: 5000` in `service.yaml`. `/health`
-  is a good liveness/readiness probe path.
-- **Demo tip:** for the "developer pushes a code change" step, edit the
-  `<p>` line in `templates/index.html` (e.g. the subtitle text) or add a
-  student live on screen — either one is a visible change that flows
-  through the whole pipeline and shows up in the browser after deploy.
