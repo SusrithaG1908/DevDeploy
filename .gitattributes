@@ -1,0 +1,7 @@
+# Normalize line endings (important: Jenkinsfile and shell scripts must use LF)
+* text=auto
+*.sh text eol=lf
+Jenkinsfile text eol=lf
+Dockerfile text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
