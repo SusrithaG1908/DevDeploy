@@ -37,3 +37,24 @@ python app.py
 ```bash
 pytest -v
 ```
+
+## Team & Responsibilities
+| Member | Responsibility | Branch |
+|---|---|---|
+| Member 1 | Application + Testing (Flask, pytest) | `feature/application` |
+| Member 2 | Git, GitHub, Gitflow, Webhook | `feature/git-workflow` |
+| Member 3 | Docker + Docker Compose | `feature/docker` |
+| Member 4 | Jenkins CI/CD | `feature/jenkins` |
+| Member 5 | Kubernetes + Scaling | `feature/kubernetes` |
+
+## Git workflow
+This repo uses **Gitflow** (`main` ← `develop` ← `feature/*`) with Pull Requests.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, commit conventions and rules.
+
+## GitHub → Jenkins webhook
+See [docs/WEBHOOK_SETUP.md](docs/WEBHOOK_SETUP.md).
+
+## CI/CD flow
+```
+git push → GitHub → Webhook → Jenkins → Test → Docker Build → Kubernetes Deploy
+```

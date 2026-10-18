@@ -25,3 +25,16 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Jenkins / CI local artifacts
+.jenkins/
+*.log
+
+# Docker / Kubernetes local files
+docker-compose.override.yml
+*.kubeconfig
+kubeconfig
+
+# Coverage
+.coverage
+htmlcov/
