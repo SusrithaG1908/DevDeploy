@@ -5,6 +5,7 @@ pipeline {
     environment {
         PIP_DISABLE_PIP_VERSION_CHECK = '1'
         DOCKER_IMAGE = 'susrithag/devdeploy-app'
+        KUBECONFIG = '/var/jenkins_home/.kube/config'
     }
 
     stages {
@@ -51,6 +52,24 @@ pipeline {
                         docker logout
                     '''
                 }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                echo 'Deploying application to Minikube...'
+
+                sh '''
+                    kubectl apply -f k8s/
+
+                    kubectl set image deployment/devdeploy devdeploy-app=$DOCKER_IMAGE:$BUILD_NUMBER
+
+                    kubectl rollout status deployment/devdeploy --timeout=180s
+
+                    kubectl get deployments
+                    kubectl get pods -l app=devdeploy -o wide
+                    kubectl get service devdeploy-service
+                '''
             }
         }
     }
