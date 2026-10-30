@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: devdeploy
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: devdeploy
+
+  template:
+    metadata:
+      labels:
+        app: devdeploy
+
+    spec:
+      containers:
+        - name: devdeploy-app
+          image: susrithag/devdeploy-app:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 5000
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
