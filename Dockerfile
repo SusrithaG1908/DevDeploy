@@ -3,7 +3,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt gunicorn==23.0.0
+RUN pip install --no-cache-dir --default-timeout=300 --retries=10 -r requirements.txt gunicorn==23.0.0
 COPY app.py .
 COPY templates/ ./templates/
 RUN useradd --create-home --uid 10001 appuser && chown -R appuser:appuser /app
